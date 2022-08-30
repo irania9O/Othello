@@ -1,3 +1,4 @@
+from game import Game
 from src.constant import *
 from src.board import Board
 import pygame
@@ -16,12 +17,13 @@ class Main:
         # Changing surface color
         self.screen.fill(color)
         
-        # Store Board object in blew varivble
-        self.board = Board()
+        # Store Game object in blew varivble
+        self.game = Game(self.screen)
 
     def mainloop(self):
         while True:
-            self.board.show(self.screen)
+            self.game.show_board()
+            self.game.show_pieces()
 
             for event in pygame.event.get():
                 # exit game and close screen
