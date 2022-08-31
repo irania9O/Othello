@@ -175,4 +175,6 @@ class Game:
                         self.black_pieces += 1
                     elif self.board.squares[row][col].piece.color == "white":
                         self.white_pieces += 1
- 
+
+    def reset(self):
+        self.__init__(self.screen)

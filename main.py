@@ -41,9 +41,13 @@ class Main:
                         self.game.calculate_piece()
                         self.game.show_possibles()
                         self.game.show_pieces()
+                        
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_r:
+                        self.game.reset()
 
                 # exit game and close screen
-                if event.type == pygame.QUIT:
+                elif event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
                     
