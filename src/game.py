@@ -1,6 +1,7 @@
 from src.board import Board
 from src.constant import *
 import pygame
+from src.piece import Piece
 from src.square import Square
 
 class Game:
@@ -10,6 +11,7 @@ class Game:
         self.turn = "white"
         self.board = Board()
         self.possible_squares = []
+        self.reverse_squares = []
 
     def show_board(self):
         for row in range(ROWS):
@@ -78,6 +80,52 @@ class Game:
                     (+1, 0), # down
                     (0, -1)  # right
                     ])
+
+
+    def calculate_reverse(self, row, col):
+        for row_incr, col_incr in [
+                (-1, +1), # up-right
+                (-1, -1), # up-lefr
+                (+1, -1), # down-right
+                (+1, +1), # down-left
+                (-1, 0), # up
+                (0, +1), # left
+                (+1, 0), # down
+                (0, -1)  # right
+                ]:
+            possible_row = row + row_incr
+            possible_col = col + col_incr
+
+
+            if Square.in_range(possible_row, possible_col):
+                if self.board.squares[possible_row][possible_col].has_enemy_piece(self.turn):
+                    row_step = possible_row - row 
+                    col_step = possible_col - col
+                    between = []
+                    status = False
+                    for i in range(1,8):
+                        c_row = row + i*row_step
+                        c_col = col + i*col_step
+                        if Square.in_range(c_row, c_col):
+                            if self.board.squares[c_row][c_col].has_enemy_piece(self.turn):
+                                try:
+                                    if self.board.squares[c_row+row_step][c_col+col_step].has_enemy_piece(self.turn):
+                                        between.append(Square(c_row, c_col))
+                                    elif self.board.squares[c_row+row_step][c_col+col_step].has_team_piece(self.turn):
+                                        between.append(Square(c_row, c_col))
+                                        break
+                                    elif self.board.squares[c_row+row_step][c_col+col_step].is_empty():
+                                        between.clear()
+                                        break
+                                    else:
+                                        between.clear()
+                                        break                                 
+                                except:
+                                        between.clear()
+                                        break
+                                
+                    for sqr in between:
+                        self.board.squares[sqr.row][sqr.col] = Square(sqr.row, sqr.col, Piece(self.turn))
 
     def show_possibles(self):
         for sqr in self.possible_squares:

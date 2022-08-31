@@ -35,6 +35,7 @@ class Main:
 
                     if Square(clicked_row, clicked_col) in  self.game.possible_squares:
                         self.game.board.squares[clicked_row][clicked_col] = Square(clicked_row, clicked_col, Piece(self.game.turn))
+                        self.game.calculate_reverse(clicked_row, clicked_col)
                         self.game.next_turn()
                         self.game.show_board()
                         self.game.calculate_piece()
