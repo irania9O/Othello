@@ -1,4 +1,4 @@
-from game import Game
+from src.game import Game
 from src.constant import *
 from src.board import Board
 import pygame
@@ -9,7 +9,7 @@ class Main:
         # Initialing pygame screen
         pygame.init()
         self.screen = pygame.display.set_mode( (WIDTH, HEIGHT) )
-        pygame.display.set_caption("Chess")
+        pygame.display.set_caption("Reversi (Othello)")
 
         # Initialing RGB green 
         color = (0, 144, 103)
@@ -23,9 +23,13 @@ class Main:
     def mainloop(self):
         while True:
             self.game.show_board()
+            self.game.calculate_piece()
             self.game.show_pieces()
 
             for event in pygame.event.get():
+                # if event.type == pygame.MOUSEBUTTONDOWN:
+                #     self.game.calculate_piece()
+				    
                 # exit game and close screen
                 if event.type == pygame.QUIT:
                     pygame.quit()
