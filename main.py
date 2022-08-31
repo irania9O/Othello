@@ -10,7 +10,7 @@ class Main:
         # Initialing pygame screen
         pygame.init()
         self.screen = pygame.display.set_mode( (WIDTH, HEIGHT) )
-        pygame.display.set_caption("Reversi (Othello)")
+        pygame.display.set_caption("Othello")
 
         # Initialing RGB green 
         color = (0, 144, 103)
