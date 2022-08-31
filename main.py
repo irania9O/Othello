@@ -1,6 +1,7 @@
 from src.game import Game
+from src.piece import Piece
+from src.square import Square
 from src.constant import *
-from src.board import Board
 import pygame
 import sys
 
@@ -24,12 +25,22 @@ class Main:
         while True:
             self.game.show_board()
             self.game.calculate_piece()
+            self.game.show_possibles()
             self.game.show_pieces()
 
             for event in pygame.event.get():
-                # if event.type == pygame.MOUSEBUTTONDOWN:
-                #     self.game.calculate_piece()
-				    
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    clicked_row = event.pos[1] // SQSIZE
+                    clicked_col = event.pos[0] // SQSIZE
+
+                    if Square(clicked_row, clicked_col) in  self.game.possible_squares:
+                        self.game.board.squares[clicked_row][clicked_col] = Square(clicked_row, clicked_col, Piece(self.game.turn))
+                        self.game.next_turn()
+                        self.game.show_board()
+                        self.game.calculate_piece()
+                        self.game.show_possibles()
+                        self.game.show_pieces()
+
                 # exit game and close screen
                 if event.type == pygame.QUIT:
                     pygame.quit()

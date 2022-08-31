@@ -9,17 +9,17 @@ class Game:
         self.screen  = screen
         self.turn = "white"
         self.board = Board()
+        self.possible_squares = []
 
     def show_board(self):
         for row in range(ROWS):
             for col in range(COLS):
-                # Initialing RGB black
-                color = (0, 0, 0)
-
-                # Create square corner positions
+                color = (0, 144, 103)
                 rect = (col * SQSIZE, row * SQSIZE, SQSIZE, SQSIZE)
+                pygame.draw.rect(self.screen, color, rect)
 
-                # Craw square on screen
+                color = (0, 0, 0)
+                rect = (col * SQSIZE, row * SQSIZE, SQSIZE, SQSIZE)
                 pygame.draw.rect(self.screen, color, rect, width =1)
 
     def show_pieces(self):
@@ -40,6 +40,7 @@ class Game:
                     self.screen.blit(img, piece.texture_rect)
 
     def calculate_piece(self):
+        self.possible_squares = []
         def straightline_moves(row, col, incrs):
             for row_incr, col_incr in incrs:
                 possible_row = row + row_incr
@@ -59,19 +60,13 @@ class Game:
                                     break
                                 elif self.board.squares[c_row][c_col].is_empty():
                                     if self.board.squares[c_row-row_step][c_col-col_step].has_enemy_piece(self.turn):
-                                        color = (128, 0, 0)
-                                        rect = (c_col * SQSIZE, c_row * SQSIZE, SQSIZE, SQSIZE)
-                                        pygame.draw.rect(self.screen, color, rect)
+                                        self.possible_squares.append(Square(c_row, c_col))
                                     else:
                                         break
         for row in range(ROWS):
             for col in range(COLS):
-                #self.board.squares[row][col].piece.clear_possible_sqr()
                 # if we have pice on specific squares
                 if self.board.squares[row][col].has_team_piece(self.turn):
-                    # color = (0, 0, 128)
-                    # rect = (col * SQSIZE, row * SQSIZE, SQSIZE, SQSIZE)
-                    # pygame.draw.rect(self.screen, color, rect)
                     straightline_moves(row, col,
                     [
                     (-1, +1), # up-right
@@ -83,3 +78,16 @@ class Game:
                     (+1, 0), # down
                     (0, -1)  # right
                     ])
+
+    def show_possibles(self):
+        for sqr in self.possible_squares:
+            if isinstance(sqr, Square):
+                color = (245, 66, 75)
+                rect = (sqr.col * SQSIZE, sqr.row * SQSIZE, SQSIZE, SQSIZE)
+                pygame.draw.rect(self.screen, color, rect)      
+                color = (0, 0, 0)
+                rect = (sqr.col * SQSIZE, sqr.row * SQSIZE, SQSIZE, SQSIZE)
+                pygame.draw.rect(self.screen, color, rect, width =1)          
+
+    def next_turn(self):
+        self.turn = "white" if self.turn == "black" else "black"
