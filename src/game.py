@@ -10,6 +10,7 @@ class Game:
     def __init__(self, screen) -> None:
         self.screen  = screen
         self.turn = "white"
+        self.winner = False
         self.board = Board()
         self.possible_squares = []
         self.reverse_squares = []
@@ -48,6 +49,29 @@ class Game:
                     label_position[0] = 545
                 self.screen.blit(self.label, label_position)                
 
+                if self.winner:
+                    self.screen.blit(img_white, img_white.get_rect(center=img_white_center))
+                    label_position = [185 , 625]
+                    if self.white_pieces > self.black_pieces:
+                        msg = "Player white wins."
+                    elif self.white_pieces < self.black_pieces:
+                        msg = "Player black wins."
+                    else:
+                        label_position = [265 , 625]
+                        msg = "Draw"
+
+                    self.label = pygame.font.SysFont('arial', 35).render(msg, 1, (245, 239, 66))
+                    
+                    self.screen.blit(self.label, label_position)    
+                    self.label = pygame.font.SysFont('arial', 20).render(f"press r to restart.", 1, (245, 239, 66))
+                    label_position = [235 , 675]
+                    self.screen.blit(self.label, label_position)    
+                else:
+                    self.screen.blit(img_white, img_white.get_rect(center=img_white_center))
+                    self.label = pygame.font.SysFont('arial', 25).render(f"it's {self.turn} player.", 1, (0,0,0))
+                    label_position = [230 , 635]
+                    self.screen.blit(self.label, label_position)    
+                    
     def show_pieces(self):
 
         for row in range(ROWS):
@@ -134,6 +158,9 @@ class Game:
                         if Square.in_range(c_row, c_col):
                             if self.board.squares[c_row][c_col].has_enemy_piece(self.turn):
                                 try:
+                                    if not Square.in_range(c_row+row_step, c_col+col_step):
+                                        between.clear()
+                                        break
                                     if self.board.squares[c_row+row_step][c_col+col_step].has_enemy_piece(self.turn):
                                         between.append(Square(c_row, c_col))
                                     elif self.board.squares[c_row+row_step][c_col+col_step].has_team_piece(self.turn):

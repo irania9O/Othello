@@ -39,6 +39,10 @@ class Main:
                         self.game.next_turn()
                         self.game.show_board()
                         self.game.calculate_piece()
+
+                        if len(self.game.possible_squares) == 0:
+                            self.game.winner = True
+
                         self.game.show_possibles()
                         self.game.show_pieces()
                         
