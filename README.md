@@ -36,7 +36,6 @@ python main.py
 # 🖼️ Screenshots
 <br>
 
-# Screenshots
 <p float="left">
   <img src="./screenshots/1.jpg" width="49%" />
   <img src="./screenshots/2.jpg" width="49%" /> 
